@@ -1,6 +1,4 @@
-Simple and clean treetable in vanilla js. 
-
-
+Simple and clean treetable (treegrid) in vanilla javascript. 
 
 How it works
 -----
@@ -19,4 +17,6 @@ Each row needs a unique ```id``` and to have the ```id``` of its parent added to
 ```
 
 
+
+On load the code will scan the table, add collapse/expand icons on rows with children, and indent the first column.
 
