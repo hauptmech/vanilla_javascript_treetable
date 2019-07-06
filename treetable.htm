@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style id="compiled-css" type="text/css">
+  td:first-child {
+    padding-left: var(--depth );
+  }
+  tbody .expanded .treetoggle::before {  
+    transform: rotate(90deg); 
+  }
+  tbody .treetoggle::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+  }
+  </style>
+
+  <script type="text/javascript">
+//<![CDATA[
+function ready(callbackFunc) {
+  if (document.readyState !== 'loading') {
+    callbackFunc();
+  } else {
+    document.addEventListener('DOMContentLoaded', callbackFunc);
+  } 
+}
+
+//Depth first set style.display to parameter if expanded
+function setChildren(container, list, display){
+  for (let item of list){
+    kids = container.getElementsByClassName(item.id)
+    if (kids.length > 0 && item.classList.contains('expanded')){
+      setChildren(container, kids, display)
+    }
+    item.style.display = display
+  }
+}
+
+ready(function() {
+  //Prep rows display, carats and toggles
+  rows = document.getElementById("treetable").tBodies[0].children
+  //Subrows must be display:none; to work correctly
+  for (let item of rows){
+    if (!item.classList.contains('treeroot')){
+      item.style.display = 'none';
+    }
+  }
+  //Insert toggle carat and indent
+  for (let item of rows){
+    if (item.classList.contains('treeroot')){
+      item.mytabledepth = 0
+    }
+    //Check if item has kids
+    var cnt = 0;
+    for (let r of rows){
+      if (r.classList.contains(item.id)){
+        cnt++;
+        r.mytabledepth = item.mytabledepth+1;
+      }
+    }
+    if (cnt > 0){
+      item.children[0].insertAdjacentHTML('afterbegin','<span class="treetoggle"></span>');
+    }
+   }
+   //Set leader indent depth
+   for (let item of rows){
+     el = item.children[0]
+     el.setAttribute('style', el.style.cssText  + '--depth: '+0.5*item.mytabledepth+'em');
+   }
+
+   //Add onclick listener
+   toggles = document.getElementById("treetable").getElementsByClassName('treetoggle')
+   for (let item of toggles){
+    item.addEventListener('click',function(){
+      var tr = this.closest('tr')
+      var children = this.closest('tbody').getElementsByClassName(tr.id)
+      tr.classList.toggle('expanded')
+      setChildren(tr.parentNode,children,tr.classList.contains('expanded')?'table-row':'none')
+    });
+   }
+
+});
+
+//]]></script>
+
+</head>
+<body>
+  <table id="treetable">
+  <tbody>
+  <tr id="id1" class="treeroot">
+    <td>Item 1</td>
+    <td>123</td>
+  </tr>
+  <tr id="id2" class="id1">
+    <td >Item 2</td>
+    <td>123</td>
+  </tr>
+  <tr id="id3" class="id2">
+    <td> Item 3</td>
+    <td>123</td>
+  </tr>
+  <tr id="id4" class="id1">
+    <td> Item 4</td>
+    <td>123</td>
+  </tr>
+  <tr id="id5" class="treeroot">
+    <td>Item 5</td>
+    <td>123</td>
+  </tr>
+  <tr id="id6" class="id5">
+    <td>Item 6</td>
+    <td>123</td>
+  </tr>
+</tbody></table>
+
+  
+  
+
+
+</body></html>
